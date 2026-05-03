@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LinkedStack.h"
 #include "PriorityQueue.h"
 #include "HeapPriorityQueue.h"
 #include "Ventanilla.h"

@@ -1,3 +1,9 @@
+//Clase que define los atributos y métodos un Linked Stack.
+//Las funcionalidades de esta clase son: Agregar elementos al Stack, eliminar elementos del Stack,
+//ver sus elementos y sus datos.
+//Creadores: El profe, Jose Alberto Bulgarelli e Ignacio Castillo.
+#pragma once
+
 #pragma once
 
 #include <stdexcept>
@@ -16,21 +22,21 @@ private:
 	int size;
 
 public:
-	LinkedStack() {
+	LinkedStack() { //Crea un objeto LinkedStack.
 		size = 0;
 		top = nullptr;
 	}
 
-	~LinkedStack() {
+	~LinkedStack() { //Elimina el objeto.
 		clear();
 	}
 
-	void push(E element) {
+	void push(E element) { //Agrega un elemento al Stack.
 		top = new Node<E>(element, top);
 		size++;
 	}
 
-	E pop() {
+	E pop() { //Quita un objeto del Stack.
 		if (size == 0)
 			throw runtime_error("Stack is empty.");
 		E result = top->element;
@@ -41,13 +47,13 @@ public:
 		return result;
 	}
 
-	E topValue() {
+	E topValue() { //Regresa el elemento en la cima del Stack.
 		if (size == 0)
 			throw runtime_error("Stack is empty.");
 		return top->element;
 	}
 
-	void clear() {
+	void clear() { //Borra los elementos del Stack.
 		Node<E>* temp;
 		for (int i = 0; i < size; i++) {
 			temp = top;
@@ -57,15 +63,15 @@ public:
 		size = 0;
 		}
 
-	bool isEmpty() {
+	bool isEmpty() { //Regresa si el Stack esta vacío.
 		return size == 0;
 	}
 
-	int getSize() {
+	int getSize() { //Regresa el tamaño del Stack.
 		return size;
 	}
 
-	void print() {
+	void print() { //Imprime los elementos del Stack.
 		Node<E>* temp = top;
 		cout << "[";
 		for (int i = 0; i < size; i++) {

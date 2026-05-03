@@ -21,35 +21,35 @@ private:
 	MinHeap<Pair<int, E>>* pairs;
 
 public:
-	HeapPriorityQueue(int max = DEFAULT_MAX) {
+	HeapPriorityQueue(int max = DEFAULT_MAX) { //Crea un objeto de Min Heap Priority.
 		pairs = new MinHeap<Pair<int, E>>(max);
 	}
-	~HeapPriorityQueue() {
+	~HeapPriorityQueue() { //Destruye el objeto.
 		clear();
 		delete pairs;
 	}
-	void insert(E element, int priority){
+	void insert(E element, int priority){ //Agrega un elemento al Heap.
 		Pair<int, E> p(priority, element);
 		pairs->insert(p);
 	}
-	E min() {
+	E min() { //Regresa el valor minimo en el Heap.
 		Pair<int, E> p = pairs->first();
 		return p.value;
 	}
-	E removeMin() {
+	E removeMin() { //Elimina el valor minimo en el Heap.
 		Pair<int, E> p = pairs->removeFirst();
 		return p.value;
 	}
-	void clear() {
+	void clear() { //Limpia el objeto.
 		pairs->clear();
 	}
-	int getSize() {
+	int getSize() { //Regresa el tamaño del Heap.
 		return pairs->getSize();
 	}
-	bool isEmpty() {
+	bool isEmpty() { //Regresa si el Heap esta vacío.
 		return pairs->isEmpty();
 	}
-	void print() {
+	void print() { //Imprime los contenidos del Heap.
 		pairs->print();
 	}
 };
