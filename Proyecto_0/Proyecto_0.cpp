@@ -1,14 +1,44 @@
 #include <iostream>
 #include <stdexcept>
+#include <string>
+#include "PriorityQueue.h"
+#include "HeapPriorityQueue.h"
+#include "Pair.h"
+#include "LinkedStack.h"
 
 using std::cout;
 using std::endl;
 using std::runtime_error;
+using std::string;
 
-//Para la escritura de los tipos de usuario en la lista, se puede crear una variable temporal, remover todos los usuarios del heap y ponerlos en la temporal, al mismo tiempo que se displeyean, y luego se vuelven a eliminar del temporal para volverlos a meter al original.
+string sacaMete(LinkedStack<string>& lista1, LinkedStack<string>& lista2) {
+    string s = lista1.pop();
+    lista2.push(s);
+    return s;
+}
+
+void sacaMeteVoid(LinkedStack<string>& lista1, LinkedStack<string>& lista2) {
+    string s = lista1.pop();
+    lista2.push(s);
+}
+
+void printUsuarios(LinkedStack<string>& usuarios) {
+    LinkedStack<string> temp;
+    string nombre;
+    int contador = usuarios.getSize();
+    for (int i = 0; i < contador; i++) {
+        nombre = sacaMete(usuarios, temp);
+        cout << nombre << endl;
+    }
+    contador = temp.getSize();
+    for (int i = 0; i < contador; i++)
+        sacaMeteVoid(temp, usuarios);
+}
 
 int main() {
     try {
+        PriorityQueue<string>* usuarios = new HeapPriorityQueue<string>();
+        LinkedStack<string> listaUsuarios;
         // Elegir una opcion:
         // 1. Estado de colas
         // Mostrar areas existentes, cantidad de ventanillas en cada area y codigos de los tiquetes presentes en las diferentes colas
