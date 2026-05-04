@@ -1,4 +1,4 @@
-//Clase que define los atributos y métodos un Heap con prioridad.
+//Clase que define los atributos y métodos de un Heap con prioridad.
 //Las funcionalidades de esta clase son: Agregar elementos al Heap, eliminar elementos del Heap,
 //ver sus elementos y sus datos.
 //Creadores: El profe, Jose Alberto Bulgarelli e Ignacio Castillo.
