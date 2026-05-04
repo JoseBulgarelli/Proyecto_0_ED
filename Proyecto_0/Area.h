@@ -20,6 +20,7 @@ class Area {
 private:
     PriorityQueue<E>* servicios = new HeapPriorityQueue<E>();
     LinkedStack<Ventanilla> ventanillas;
+    HeapPriorityQueue<Tiquete> tiquetes;
     string descripcion;
     string codigo;
 
@@ -28,6 +29,8 @@ public:
         this->descripcion = descripcion;
         this->codigo = codigo;
     }
+
+    Area() {} //Crea un objeto vacío.
 
     ~Area() { //Destrulle el objeto Area.
         servicios->clear();

@@ -90,6 +90,13 @@ public:
 		cascadeDown(pos);
 		return elements[size];
 	}
+	E getElement(int pos) {
+		if (size == 0)
+			throw runtime_error("Heap is empty.");
+		if (pos < 0 || pos >= size)
+			throw runtime_error("Index out of range.");
+		return elements[pos];
+	}
 	void clear() { //Borrado lógico del MinHeap.
 		size = 0;
 	}

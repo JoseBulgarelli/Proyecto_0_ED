@@ -36,6 +36,10 @@ public:
 		Pair<int, E> p = pairs->first();
 		return p.value;
 	}
+	E remove(int pos) {
+		Pair<int, E> p = pairs->remove(pos);
+		return p.value;
+	}  
 	E removeMin() { //Elimina el valor minimo en el Heap.
 		Pair<int, E> p = pairs->removeFirst();
 		return p.value;
