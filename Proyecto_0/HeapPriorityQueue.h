@@ -56,4 +56,8 @@ public:
 	void print() { //Imprime los contenidos del Heap.
 		pairs->print();
 	}
+	E getElement(int pos) {
+		Pair<int, E> p = pairs->getElement(pos);
+		return p;
+	}
 };

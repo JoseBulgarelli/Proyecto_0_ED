@@ -24,4 +24,5 @@ public:
 	virtual int getSize() = 0;
 	virtual void print() = 0;
 	virtual E trueGetElement(int Pos) = 0;
+	virtual E trueRemove(int Pos) = 0;
 };

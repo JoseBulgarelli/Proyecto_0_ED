@@ -50,13 +50,13 @@ void printUsuarios(LinkedList<string>* usuarios) {
     delete temp;
 }
 
-//template <typename E>
+template <typename E>
 int main() {
     try {
         string opcionPrincipal = "0", opcionSecundaria = "0";
         List<string>* listaUsuarios = new LinkedList<string>();
         List<string>* codigoUsuarios = new LinkedList<string>();
-        List<Area<string>()>* areas = new LinkedList<Area<string>()>();
+        List<Area<string>>* areas = new LinkedList<Area<string>>();
         HeapPriorityQueue<string>* tiposUsuario = new HeapPriorityQueue<string>;
         // Elegir una opcion:
         while (opcionPrincipal != "6") {
@@ -82,34 +82,65 @@ int main() {
 
             // 2. Tiquetes
             if (opcionPrincipal == "2") {
-                cout << "Escoja una opcion:" << endl;
-                cout << "\t1. Seleccionar usuario y servicio." << endl;
-                cout << "\t2. Regresar." << endl;
-                cout << "Opcion: ";
-                getline(cin, opcionSecundaria);
-                while (!revisarOpcion(opcionSecundaria, 2)) {
-                    cout << "Escriba una opcion valida: ";
+                opcionSecundaria = "1";
+                while (opcionSecundaria == "1") {
+                    cout << "Escoja una opcion:" << endl;
+                    cout << "\t1. Seleccionar usuario y servicio." << endl;
+                    cout << "\t2. Regresar." << endl;
+                    cout << "Opcion: ";
                     getline(cin, opcionSecundaria);
+                    while (!revisarOpcion(opcionSecundaria, 2)) {
+                        cout << "Escriba una opcion valida: ";
+                        getline(cin, opcionSecundaria);
+                    }
+
+                    // 1. Seleccionar tipo de cliente y servicio
+                    if (opcionSecundaria == "1") {
+                    
+                    }
                 }
 
-                // 1. Seleccionar tipo de cliente y servicio
-                if (opcionSecundaria == "1") {
+                    // 2. Regresar
                 
-                }
-
-                // 2. Regresar
-                if (opcionSecundaria == "2") {
-                    opcionPrincipal = "0";
-                    opcionSecundaria = "0";
-                }
 
             }
 
             // 3. Atender
             if (opcionPrincipal == "3") {
-                
+                string areaAtender, ventanillaAtender;
+                int posicionArea;
+                cout << "Escoja el area a atender: ";
+                getline(cin, areaAtender);
+                bool areaExiste = false;
+                areas->goToStart();
+                for (int i = 0; i < areas->getSize(); i++) {
+                    if (areas->getElement().getDescripcion() == areaAtender) {
+                        areaExiste = true;
+                        posicionArea = i;
+                        break;
+                    }
+                    areas->next();
+                }
+                if (areaExiste && areas->getElement().getCantidadVentanillas() == 0)
+                    cout << "No hay ventanillas en esta area.";
+                else if (areaExiste) {
+                    Area<string> areaActual = areas->getElement();
+                    cout << "Escoja la ventanilla a atender:" << endl;
+                    areaActual.mostrarVentanillas();
+                    getline(cin, ventanillaAtender);
+                    if (!areaActual.ventanillaExiste(ventanillaAtender))
+                        cout << "La ventanilla no existe." << endl;
+                    else {
+                        //Atiende el tiquete quitandolo del heap al que pertenece.
+                        int posicionVentanilla = areaActual.posicionVentanilla();
+                        areaActual.ventanillas.trueGetElement(posicionVentanilla).agregarAtendido();
+                    }
+                }
+                else {
+                    cout << "El area no existe." << endl;
+                }
             }
-
+            
             // 4. Administracion
             if (opcionPrincipal == "4") {
                 cout << "Escoja una opcion:" << endl;
@@ -159,7 +190,7 @@ int main() {
                     
                     // 2. Eliminar
                     if (opcionSecundaria == "2") {  // La lista de tipos esta ordenada por orden de entrada entonces el usuario te va a dar ese numerito, luego del numerito vez el nomble porque en la otra si esta ordenado bien, y ese nombre lo buscas UNO POR UNO en el heap y lo borras
-                        int indiceBorrar = 0;
+                        int indiceBorrar = 0;       // Big brain time
                         for (int i = 0; i < listaUsuarios->getSize(); i++) {
                             cout << i << ". " << listaUsuarios->trueGetElement(i) << endl;
                         }
@@ -180,6 +211,14 @@ int main() {
                             }
                         }
                         // Aca el borrar action como tal
+                        // Crea una copia del heap, borrar 1 por 1 hasta encontrar el elemento que ocupas borrar de la otra
+                        string hayQueBorrar = listaUsuarios->trueRemove(indiceBorrar-1);
+                        string buscandoANemo = "Es imposible que pongas un tipo de usuario que sea ASI de forma que NUNCA va a fallar esto, osea tiene quwe hitear todos los caracteres INCLUSO los typos, mira pongo cosas aleatorias para que de FIJO no lo pegues, SJKHSFUISGFYUIHWJFASHGFJHSAVDIBJFKHAHOIFW, wabam";
+                        for (int i = 0; buscandoANemo != hayQueBorrar; i++) {
+                            if (tiposUsuario->getElement(i) == hayQueBorrar) {
+                                buscandoANemo = tiposUsuario->remove(i);
+                            }
+                        }
                     }
 
                     // 3. Regresar
@@ -203,13 +242,33 @@ int main() {
                     }
 
                     // 1. Agregar
-                    if (opcionSecundaria == "1") {
-
+                    if (opcionSecundaria == "1") {  // El area debe tener descripcion, codigo y cantidad de ventanillas
+                        string newAreaDesc;
+                        string newAreaCode;
+                        string newAreaWindCount; // Asi bien gringo
+                        cout << "Nombre del area: ";
+                        getline(cin, newAreaDesc);
+                        cout << "Cantidad de ventanillas en el area: ";
+                        getline(cin, newAreaWindCount);
+                        for (int i = 0; i < newAreaWindCount.length() ; i++) {
+                            if (!isdigit(newAreaWindCount[i])) {
+                                i = 0;
+                                cout << "Escriba una cantidad valida: ";
+                                getline(cin, newAreaWindCount);
+                            }
+                        }
+                        newAreCode = newAreaDesc[0] //bleh
+                        areas->insert(Area<E>(newAreaDesc, newAreaCode, stoi(newAreaWindCount)));
                     }
 
                     // 2. Modificar cantidad de ventanillas
                     if (opcionSecundaria == "2") {
+                        for (int i = 0; )
 
+                        string areaNewWindCount;
+                        cout << "";
+                        getline(cin, areaNewWindCount);
+                        
                     }
 
                     // 3. Eliminar
@@ -273,10 +332,13 @@ int main() {
             if (opcionPrincipal == "5") {
                 
             }
+            
             // 6. Salir
             if (opcionPrincipal == "6") {
                 break;
             }
+            opcionPrincipal = "0";
+            opcionSecundaria = "0";
         }
     }
     catch (const runtime_error& e) {
@@ -289,3 +351,5 @@ int main() {
 //Confirmo
 
 // We are so fucking cooked
+
+// We are so back

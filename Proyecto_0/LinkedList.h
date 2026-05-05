@@ -130,7 +130,12 @@ public:
 	}
 
 	E trueGetElement(int pos) {
-		goToPos();
+		goToPos(pos);
 		return getElement();
+	}
+
+	E trueRemove(int pos) {
+		goToPos(pos);
+		return remove();
 	}
 };

@@ -6,7 +6,8 @@
 
 #include <stdexcept>
 #include <string>
-#include "LinkedStack.h"
+#include "List.h"
+#include "LinkedList.h"
 #include "PriorityQueue.h"
 #include "HeapPriorityQueue.h"
 #include "Ventanilla.h"
@@ -19,21 +20,24 @@ template <typename E>
 class Area {
 private:
     PriorityQueue<E>* servicios = new HeapPriorityQueue<E>();
-    LinkedStack<Ventanilla> ventanillas;
+    List<Ventanilla> ventanillas;
     HeapPriorityQueue<Tiquete> tiquetes;
+    int cantidadVentanillas;
     string descripcion;
     string codigo;
 
 public:
-    Area(string descripcion, string codigo) { //Crea un objeto Area con su descripción y el código para el tiquete.
+    Area(string descripcion, string codigo, int cantidadVentanillas) { //Crea un objeto Area con su descripción y el código para el tiquete.
         this->descripcion = descripcion;
         this->codigo = codigo;
+        this->cantidadVentanillas = cantidadVentanillas;
+        ventanillas = new LinkedList<Ventanilla>();
     }
 
     Area() {} //Crea un objeto vacío.
 
     ~Area() { //Destrulle el objeto Area.
-        servicios->clear();
+        servicios.clear();
         ventanillas.clear();
         delete servicios;
         delete ventanillas;
@@ -43,15 +47,38 @@ public:
         ventanillas.print();
     }
 
-    void agregarVentanillas(int cantidad) { //Agrega la cantidad de ventanas escogidas.
+    void cambiarCantidadVentanillas(int cantidad) { //Agrega la cantidad de ventanas escogidas.
         if (cantidad <= 0)
-            throw runtime_error("Cantidad de ventanas fuera de rango.")
+            throw runtime_error("Cantidad de ventanas fuera de rango.");
+        cantidadVentanillas = cantidad;
         ventanillas.clear();
-        string ventanilla;
-        char c = descripcion[0];
+        Ventanilla ventanilla;
         for (int i = 1; i <= cantidad; i++) {
-            ventanilla = codigo + to_string(i);
-            ventanillas.push(ventanilla);
+            ventanilla = Ventanilla(0, codigo + to_string(i));
+            ventanillas.append(ventanilla);
         }
+    }
+
+    E getDescripcion() {
+        return descripcion;
+    }
+
+    int getCantidadVentanillas() {
+        return cantidadVentanillas;
+    }
+
+    bool ventanillaExiste(string nombre) {
+        ventanillas.goToStart();
+        for (int i = 0; i < cantidadVentanillas; i++)
+            if (ventanillas.getElement().nombre = nombre)
+                return true;
+    return false;
+    }
+
+    int posicionVentanilla(string nombre) {
+        ventanillas.goToStart();
+        for (int i = 0; i < cantidadVentanillas; i++)
+            if (ventanillas.getElement().nombre = nombre)
+                return i;
     }
 };
