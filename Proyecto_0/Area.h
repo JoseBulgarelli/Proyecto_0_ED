@@ -1,5 +1,5 @@
 //Clase que define los atributos y métodos de un Área.
-//Las funcionalidades de esta clase son: Agregar ventanas y servicios al área 
+//Las funcionalidades de esta clase son: Agregar ventanas, tiquetes y servicios al área 
 //y ver sus ventanas.
 //Creadores: Jose Alberto Bulgarelli e Ignacio Castillo.
 #pragma once
@@ -11,6 +11,7 @@
 #include "PriorityQueue.h"
 #include "HeapPriorityQueue.h"
 #include "Ventanilla.h"
+#include "Tiquete.h"
 
 using std::string;
 using std::to_string;
@@ -20,9 +21,12 @@ template <typename E>
 class Area {
 private:
     PriorityQueue<E>* servicios = new HeapPriorityQueue<E>();
-    List<Ventanilla> ventanillas;
-    HeapPriorityQueue<Tiquete> tiquetes;
+    List<Ventanilla>* ventanillas;
+    List<Tiquete>* tiquetes;
+    List<Tiquete>* tiquetesAtendidos;
     int cantidadVentanillas;
+    int cantidadTiquetesAtendidos;
+    int cantidadTiquetes;
     string descripcion;
     string codigo;
 
@@ -31,31 +35,34 @@ public:
         this->descripcion = descripcion;
         this->codigo = codigo;
         this->cantidadVentanillas = cantidadVentanillas;
+        tiquetesAtendidos = 0;
         ventanillas = new LinkedList<Ventanilla>();
+        tiquetes = new LinkedList<Tiquete>();
+        tiquetesAtendidos = new LinkedList<Tiquete>();
     }
 
     Area() {} //Crea un objeto vacío.
 
     ~Area() { //Destrulle el objeto Area.
-        servicios.clear();
-        ventanillas.clear();
+        servicios->clear();
+        ventanillas->clear();
         delete servicios;
         delete ventanillas;
     }
 
     void mostrarVentanillas() { //Muestra todaas las ventanas de un Area.
-        ventanillas.print();
+        ventanillas->print();
     }
 
     void cambiarCantidadVentanillas(int cantidad) { //Agrega la cantidad de ventanas escogidas.
         if (cantidad <= 0)
             throw runtime_error("Cantidad de ventanas fuera de rango.");
         cantidadVentanillas = cantidad;
-        ventanillas.clear();
+        ventanillas->clear();
         Ventanilla ventanilla;
         for (int i = 1; i <= cantidad; i++) {
             ventanilla = Ventanilla(0, codigo + to_string(i));
-            ventanillas.append(ventanilla);
+            ventanillas->append(ventanilla);
         }
     }
 
@@ -68,17 +75,28 @@ public:
     }
 
     bool ventanillaExiste(string nombre) {
-        ventanillas.goToStart();
+        ventanillas->goToStart();
         for (int i = 0; i < cantidadVentanillas; i++)
-            if (ventanillas.getElement().nombre = nombre)
+            if (ventanillas->getElement().nombre = nombre)
                 return true;
     return false;
     }
 
     int posicionVentanilla(string nombre) {
-        ventanillas.goToStart();
+        ventanillas->goToStart();
         for (int i = 0; i < cantidadVentanillas; i++)
-            if (ventanillas.getElement().nombre = nombre)
+            if (ventanillas->getElement().nombre = nombre)
                 return i;
+    }
+
+    void agregarTiquete(Tiquete tiquete, int prioridad) {
+        cantidadTiquetes++;
+        tiquetes->insert(tiquete);
+    }
+
+    void atenderTiquete() {
+        cantidadTiquetesAtendidos++;
+        tiquetes->goToStart();
+        tiquetesAtendidos->append(tiquetes->remove());
     }
 };

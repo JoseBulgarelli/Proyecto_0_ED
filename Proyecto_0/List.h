@@ -23,6 +23,6 @@ public:
 	virtual int getPos() = 0;
 	virtual int getSize() = 0;
 	virtual void print() = 0;
-	virtual E trueGetElement(int Pos) = 0;
-	virtual E trueRemove(int Pos) = 0;
+	virtual E trueGetElement(int pos) = 0;
+	virtual E trueRemove(int pos) = 0;
 };
