@@ -20,9 +20,9 @@ using std::runtime_error;
 template <typename E>
 class Area {
 private:
-    PriorityQueue<E>* servicios = new HeapPriorityQueue<E>();
+    PriorityQueue<E>* servicios;
     List<Ventanilla>* ventanillas;
-    List<Tiquete>* tiquetes;
+    PriorityQueue<Tiquete>* tiquetes;
     List<Tiquete>* tiquetesAtendidos;
     int cantidadVentanillas;
     int cantidadTiquetesAtendidos;
@@ -37,8 +37,9 @@ public:
         this->cantidadVentanillas = cantidadVentanillas;
         tiquetesAtendidos = 0;
         ventanillas = new LinkedList<Ventanilla>();
-        tiquetes = new LinkedList<Tiquete>();
+        tiquetes = new HeapPriorityQueue<Tiquete>();
         tiquetesAtendidos = new LinkedList<Tiquete>();
+        servicios = new HeapPriorityQueue<E>()
     }
 
     Area() {} //Crea un objeto vacío.
@@ -50,7 +51,7 @@ public:
         delete ventanillas;
     }
 
-    void mostrarVentanillas() { //Muestra todaas las ventanas de un Area.
+    void mostrarVentanillas() { //Muestra todas las ventanas de un Area.
         ventanillas->print();
     }
 
@@ -91,12 +92,12 @@ public:
 
     void agregarTiquete(Tiquete tiquete, int prioridad) {
         cantidadTiquetes++;
-        tiquetes->insert(tiquete);
+        tiquetes->insert(tiquete, prioridad);
     }
 
     void atenderTiquete() {
         cantidadTiquetesAtendidos++;
         tiquetes->goToStart();
-        tiquetesAtendidos->append(tiquetes->remove());
+        tiquetesAtendidos->append(tiquetes->removeMin().atender());
     }
 };
