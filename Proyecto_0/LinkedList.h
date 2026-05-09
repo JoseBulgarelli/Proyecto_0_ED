@@ -1,3 +1,7 @@
+//Clase que define los atributos y métodos un Linked List.
+//Las funcionalidades de esta clase son: Agregar elementos al List, eliminar elementos del List,
+//ver sus elementos y sus datos.
+//Creadores: El profe, Jose Alberto Bulgarelli e Ignacio Castillo.
 #pragma once
 
 #include <iostream>
@@ -137,5 +141,13 @@ public:
 	E trueRemove(int pos) {
 		goToPos(pos);
 		return remove();
+	}
+
+	void swap(int pos1, int pos2) {
+		E temp1 = trueGetElement(pos1);
+		E temp2 = trueGetElement(pos2);
+		setElement(temp1);
+		goToPos(pos1);
+		setElement(temp2);
 	}
 };

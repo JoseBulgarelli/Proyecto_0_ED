@@ -1,7 +1,12 @@
+//Clase que define los atributos y métodos de un Tiquete.
+//Las funcionalidades de esta clase son: Crear un tiquete y atender ese tiquete.
+//Creadores: Jose Alberto Bulgarelli e Ignacio Castillo.
 #pragma once
 
 #include <string>
 #include <time.h>
+
+using std::string;
 
 class Tiquete {
 private:

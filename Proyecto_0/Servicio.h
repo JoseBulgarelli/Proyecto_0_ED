@@ -1,3 +1,6 @@
+//Clase que define los atributos y métodos de un Servicio.
+//Las funcionalidades de esta clase son: Crear un servicio y agregar tiquetes atendidos.
+//Creadores: Jose Alberto Bulgarelli e Ignacio Castillo.
 #pragma once
 
 #include <string>
@@ -10,11 +13,11 @@ class Servicio {
 private:
     string descripcion;
     int prioridad;
-    Area area;
+    Area<E> area;
     int cantidadTiquetes;
 
 public:
-    Servicio(string descripcion, int prioridad, Area area) {
+    Servicio(string descripcion, int prioridad, Area<E> area) {
         this->descripcion = descripcion;
         this->prioridad = prioridad;
         this->area = area;

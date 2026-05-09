@@ -1,3 +1,6 @@
+//Clase abstracta que define los atributos y métodos de los List.
+//Define las bases para las clases que sean List.
+//Creadores: El profe, Jose Alberto Bulgarelli e Ignacio Castillo.
 #pragma once
 
 template <typename E>

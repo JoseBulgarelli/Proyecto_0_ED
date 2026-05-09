@@ -39,7 +39,7 @@ public:
         ventanillas = new LinkedList<Ventanilla>();
         tiquetes = new HeapPriorityQueue<Tiquete>();
         tiquetesAtendidos = new LinkedList<Tiquete>();
-        servicios = new HeapPriorityQueue<E>()
+        servicios = new HeapPriorityQueue<E>();
     }
 
     Area() {} //Crea un objeto vacío.
@@ -65,7 +65,7 @@ public:
             ventanilla = Ventanilla(0, codigo + to_string(i));
             ventanillas->append(ventanilla);
         }
-    }
+    } //Cambiar el codigo de aqui para que primero copie las ventanillas de la lista y luego agregue nuevas (Asi no se pierden los atendidos)
 
     E getDescripcion() {
         return descripcion;
@@ -95,9 +95,17 @@ public:
         tiquetes->insert(tiquete, prioridad);
     }
 
-    void atenderTiquete() {
+    void atenderTiquete(string ventanilla) {
         cantidadTiquetesAtendidos++;
         tiquetes->goToStart();
+        ventanillas->goToStart();
+        for (int i = 0; i < ventanillas->getSize(); i++) {
+            if (ventanillas->getElement().nombre == ventanilla) {
+                ventanillas->getElement().setUltimoAtendido(tiquetes->min().nombre);
+                break;
+            }
+            ventanillas->next();
+        }
         tiquetesAtendidos->append(tiquetes->removeMin().atender());
     }
 };
