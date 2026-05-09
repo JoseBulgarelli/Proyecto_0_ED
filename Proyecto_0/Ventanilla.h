@@ -8,18 +8,22 @@
 #include <ostream>
 
 using std::string;
+using std::ostream;
 
 class Ventanilla {
-private:
+public:
     int cantidadAtendidos;
     string nombre;
     string ultimoAtendido;
 
-public:
     Ventanilla(int cantidadAtendidos, string nombre) {
         this->cantidadAtendidos = cantidadAtendidos;
         this->nombre = nombre;
         ultimoAtendido = "N";
+    }
+
+    Ventanilla() {
+
     }
 
     ~Ventanilla() {}
@@ -30,6 +34,10 @@ public:
 
     void setUltimoAtendido(string tiquete) {
         ultimoAtendido = tiquete;
+    }
+
+    string getNombre() {
+        return nombre;
     }
 
     friend ostream& operator <<(ostream& os, const Ventanilla& ventanilla) {

@@ -4,7 +4,7 @@
 #pragma once
 
 template <typename E>
-class List{
+class List {
 public:
 	List() {}
 	List(const List<E>& other) = delete;
@@ -28,4 +28,5 @@ public:
 	virtual void print() = 0;
 	virtual E trueGetElement(int pos) = 0;
 	virtual E trueRemove(int pos) = 0;
+	virtual void swap(int pos1, int pos2) = 0;
 };

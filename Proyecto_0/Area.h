@@ -6,40 +6,42 @@
 
 #include <stdexcept>
 #include <string>
+#include <ostream>
 #include "List.h"
 #include "LinkedList.h"
 #include "PriorityQueue.h"
 #include "HeapPriorityQueue.h"
 #include "Ventanilla.h"
 #include "Tiquete.h"
+#include "Servicio.h"
 
 using std::string;
 using std::to_string;
 using std::runtime_error;
+using std::ostream;
 
-template <typename E>
 class Area {
-private:
-    PriorityQueue<E>* servicios;
+public:
+    List<Servicio>* servicios;
     List<Ventanilla>* ventanillas;
     PriorityQueue<Tiquete>* tiquetes;
-    List<Tiquete>* tiquetesAtendidos;
+    List<Tiquete>* tiquetesAtendidos; // Hijo estoy llando
     int cantidadVentanillas;
-    int cantidadTiquetesAtendidos;
-    int cantidadTiquetes;
+    int cantidadTiquetesAtendidos; // Hijo estoy crineado
+    int cantidadTiquetes; // Son im crine
     string descripcion;
     string codigo;
 
-public:
     Area(string descripcion, string codigo, int cantidadVentanillas) { //Crea un objeto Area con su descripción y el código para el tiquete.
         this->descripcion = descripcion;
         this->codigo = codigo;
         this->cantidadVentanillas = cantidadVentanillas;
-        tiquetesAtendidos = 0;
+        cantidadTiquetesAtendidos = 0;
+        cantidadTiquetes = 0;
         ventanillas = new LinkedList<Ventanilla>();
         tiquetes = new HeapPriorityQueue<Tiquete>();
         tiquetesAtendidos = new LinkedList<Tiquete>();
-        servicios = new HeapPriorityQueue<E>();
+        servicios = new LinkedList<Servicio>();
     }
 
     Area() {} //Crea un objeto vacío.
@@ -67,8 +69,24 @@ public:
         }
     } //Cambiar el codigo de aqui para que primero copie las ventanillas de la lista y luego agregue nuevas (Asi no se pierden los atendidos)
 
-    E getDescripcion() {
+    string getDescripcion() {
         return descripcion;
+    }
+
+    Ventanilla getVentanilla(int pos) {
+        return ventanillas->trueGetElement(pos);
+    }
+
+    Servicio getServicio(int pos) {
+        return servicios->trueGetElement(pos);
+    }
+
+    List<Servicio>* getServicios() {
+        return servicios;
+    }
+
+    int getCantidadTiquetes() {
+        return tiquetes->getSize();
     }
 
     int getCantidadVentanillas() {
@@ -78,15 +96,15 @@ public:
     bool ventanillaExiste(string nombre) {
         ventanillas->goToStart();
         for (int i = 0; i < cantidadVentanillas; i++)
-            if (ventanillas->getElement().nombre = nombre)
+            if (ventanillas->getElement().getNombre() == nombre)
                 return true;
-    return false;
+        return false;
     }
 
     int posicionVentanilla(string nombre) {
         ventanillas->goToStart();
         for (int i = 0; i < cantidadVentanillas; i++)
-            if (ventanillas->getElement().nombre = nombre)
+            if (ventanillas->getElement().nombre == nombre)
                 return i;
     }
 
@@ -97,7 +115,6 @@ public:
 
     void atenderTiquete(string ventanilla) {
         cantidadTiquetesAtendidos++;
-        tiquetes->goToStart();
         ventanillas->goToStart();
         for (int i = 0; i < ventanillas->getSize(); i++) {
             if (ventanillas->getElement().nombre == ventanilla) {
@@ -106,6 +123,13 @@ public:
             }
             ventanillas->next();
         }
-        tiquetesAtendidos->append(tiquetes->removeMin().atender());
+        Tiquete T = tiquetes->removeMin();
+        T.atender();
+        tiquetesAtendidos->append(T);
+    }
+
+    friend ostream& operator <<(ostream& os, const Area& area) {
+        os << area.descripcion;
+        return os;
     }
 };

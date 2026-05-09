@@ -28,7 +28,7 @@ public:
 		clear();
 		delete pairs;
 	}
-	void insert(E element, int priority){ //Agrega un elemento al Heap.
+	void insert(E element, int priority) { //Agrega un elemento al Heap.
 		Pair<int, E> p(priority, element);
 		pairs->insert(p);
 	}
@@ -39,7 +39,7 @@ public:
 	E remove(int pos) {
 		Pair<int, E> p = pairs->remove(pos);
 		return p.value;
-	}  
+	}
 	E removeMin() { //Elimina el valor minimo en el Heap.
 		Pair<int, E> p = pairs->removeFirst();
 		return p.value;

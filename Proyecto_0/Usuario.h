@@ -4,17 +4,23 @@
 #pragma once
 
 #include <string>
+#include <ostream>
 
 using std::string;
+using std::ostream;
 
 class Usuario {
-private:
+public:
     string descripcion;
     int cantidadTiquetes;
-public:
+
     Usuario(string descripcion) {
         this->descripcion = descripcion;
         cantidadTiquetes = 0;
+    }
+
+    Usuario() {
+
     }
 
     ~Usuario() {}
@@ -29,5 +35,14 @@ public:
 
     int getCantidadTiquetes() {
         return cantidadTiquetes;
+    }
+
+    void setCantidadTiquetes(int cantidad) {
+        cantidadTiquetes = cantidad;
+    }
+
+    friend ostream& operator <<(ostream& os, const Usuario& usuario) {
+        os << usuario.descripcion;
+        return os;
     }
 };

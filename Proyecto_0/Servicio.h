@@ -4,29 +4,50 @@
 #pragma once
 
 #include <string>
+#include <ostream>
 #include "Area.h"
 
 using std::string;
+using std::ostream;
 
-template <typename E>
 class Servicio {
-private:
+public:
     string descripcion;
     int prioridad;
-    Area<E> area;
+    Area area;
     int cantidadTiquetes;
 
-public:
-    Servicio(string descripcion, int prioridad, Area<E> area) {
+    Servicio(string descripcion, int prioridad, Area area) {
         this->descripcion = descripcion;
         this->prioridad = prioridad;
         this->area = area;
         cantidadTiquetes = 0;
     }
 
+    Servicio() {
+
+    }
+
     ~Servicio() {}
 
     void agregarTiquete() {
         cantidadTiquetes++;
+    }
+
+    string getDescripcion() {
+        return descripcion;
+    }
+
+    Area getArea() {
+        return area;
+    }
+
+    void setCantidadTiquetes(int cantidad) {
+        cantidadTiquetes = cantidad;
+    }
+
+    friend ostream& operator <<(ostream& os, const Servicio& servicio) {
+        os << servicio.descripcion;
+        return os;
     }
 };

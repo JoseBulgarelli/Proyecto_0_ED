@@ -6,7 +6,7 @@
 
 template <typename E>
 
-class Stack{
+class Stack {
 public:
 	Stack() {} //Crea un objeto Stack.
 	Stack(const Stack<E>& other) = delete; //Evita que se pueda copiar los datos de un Stack a otro.
@@ -14,7 +14,7 @@ public:
 	virtual ~Stack() {} //Destruye el objeto.
 
 	virtual void push(E element) = 0; //Agrega un elemento.
-    virtual E pop() = 0; //Quita un elemento.
+	virtual E pop() = 0; //Quita un elemento.
 	virtual E topValue() = 0; //Muestra el elemento en la cima del Stack.
 	virtual void clear() = 0; //Borra los elementos del objeto.
 	virtual bool isEmpty() = 0; //Regresa si el Stack esta vacío.

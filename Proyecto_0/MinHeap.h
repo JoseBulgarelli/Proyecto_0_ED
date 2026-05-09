@@ -13,12 +13,12 @@ using std::endl;
 using std::runtime_error;
 
 template <typename E>
-class MinHeap{
+class MinHeap {
 private:
 	E* elements;
 	int size;
 	int max;
-	
+
 	int leftChild(int pos) { //Regresa la posicion del hijo izquierdo.
 		return 2 * pos + 1;
 	}

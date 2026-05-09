@@ -61,7 +61,7 @@ public:
 			delete temp;
 		}
 		size = 0;
-		}
+	}
 
 	bool isEmpty() { //Regresa si el Stack esta vacío.
 		return size == 0;
