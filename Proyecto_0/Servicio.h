@@ -5,7 +5,6 @@
 
 #include <string>
 #include <ostream>
-#include "Area.h"
 
 using std::string;
 using std::ostream;
@@ -14,13 +13,13 @@ class Servicio {
 public:
     string descripcion;
     int prioridad;
-    Area area;
+    string areaDescripcion;
     int cantidadTiquetes;
 
-    Servicio(string descripcion, int prioridad, Area area) {
+    Servicio(string descripcion, int prioridad, string area) {
         this->descripcion = descripcion;
         this->prioridad = prioridad;
-        this->area = area;
+        this->areaDescripcion = area;
         cantidadTiquetes = 0;
     }
 
@@ -38,8 +37,8 @@ public:
         return descripcion;
     }
 
-    Area getArea() {
-        return area;
+    string getArea() {
+        return areaDescripcion;
     }
 
     void setCantidadTiquetes(int cantidad) {

@@ -58,6 +58,6 @@ public:
 	}
 	E getElement(int pos) {
 		Pair<int, E> p = pairs->getElement(pos);
-		return p;
+		return p.value;
 	}
 };

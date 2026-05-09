@@ -1,42 +1,4 @@
 ﻿  Proyecto_0.cpp
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(17,10): error C3646: 'area': especificador de invalidación desconocido
-  (compilando archivo de origen "Proyecto_0.cpp")
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(17,5): error C4430: falta el especificador de tipo; se presupone int. Nota: C++ no admite default-int
-  (compilando archivo de origen "Proyecto_0.cpp")
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(20,49): error C2061: error de sintaxis: identificador 'Area'
-  (compilando archivo de origen "Proyecto_0.cpp")
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(41,10): error C3646: 'getArea': especificador de invalidación desconocido
-  (compilando archivo de origen "Proyecto_0.cpp")
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(41,17): error C2059: error de sintaxis: '('
-  (compilando archivo de origen "Proyecto_0.cpp")
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(41,20): error C2334: símbolos (token) inesperados delante de '{'; se pasará por alto el cuerpo de función aparente
-  (compilando archivo de origen "Proyecto_0.cpp")
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(23,15): error C2039: "area": no es un miembro de "Servicio"
-  (compilando archivo de origen "Proyecto_0.cpp")
-      C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(13,7):
-      vea la declaración de 'Servicio'
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(23,22): error C2065: 'area': identificador no declarado
-  (compilando archivo de origen "Proyecto_0.cpp")
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(162,71): error C2039: "getArea": no es un miembro de "Servicio"
-      C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Servicio.h(13,7):
-      vea la declaración de 'Servicio'
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(328,30): error C2371: 'newAreaCode': nueva definición; tipos básicos distintos
-      C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(315,32):
-      vea la declaración de 'newAreaCode'
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(413,51): error C2440: '<function-style-cast>': no se puede realizar la conversión de 'initializer list' a 'Servicio'
-      C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(413,51):
-      'Servicio::Servicio': la función no acepta 3 argumentos
-          C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(413,51):
-          al hacer coincidir la lista de argumentos '(std::string, int, Area)'
-  
-C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(506,73): warning C4244: '+=': conversión de 'time_t' a 'int'; posible pérdida de datos
+C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Proyecto_0.cpp(508,73): warning C4244: '+=': conversión de 'time_t' a 'int'; posible pérdida de datos
+C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\Area.h(109,1): warning C4715: 'Area::posicionVentanilla': no todas las rutas de acceso de control devuelven un valor
+  Proyecto_0.vcxproj -> C:\Users\Jose\OneDrive - Estudiantes ITCR\TEC\Estructuras de Datos\Proyecto_0\x64\Debug\Proyecto_0.exe

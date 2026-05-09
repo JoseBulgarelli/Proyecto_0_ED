@@ -14,9 +14,11 @@ public:
 	virtual ~PriorityQueue() {} //Destruye el objeto.
 	virtual void insert(E element, int priority) = 0; //Agrega un elemento con prioridad.
 	virtual E min() = 0; //Revisa el elemento con mayor prioridad.
+	virtual E remove(int pos) = 0; // Empanadas
 	virtual E removeMin() = 0; //Elimina el elemento con mayor prioridad.
 	virtual void clear() = 0; //Borra los datos del objeto.
 	virtual int getSize() = 0; //Regresa el tamaño del Priority Queue.
 	virtual bool isEmpty() = 0; //Revisa si el Priority Queue esta vacío.
 	virtual void print() = 0; //Imprime los datos del Priority Queue.
+	virtual E getElement(int pos) = 0; // Enchiladas
 };

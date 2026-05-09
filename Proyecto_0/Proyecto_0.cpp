@@ -79,7 +79,7 @@ int main() {
         List<Usuario>* listaUsuarios = new LinkedList<Usuario>();
         List<string>* codigoUsuarios = new LinkedList<string>();
         List<Area>* areas = new LinkedList<Area>();
-        HeapPriorityQueue<string>* tiposUsuario = new HeapPriorityQueue<string>;
+        PriorityQueue<string>* tiposUsuario = new HeapPriorityQueue<string>();
         List<Servicio>* servicios = new LinkedList<Servicio>();
         // Elegir una opcion:
         while (opcionPrincipal != "6") {
@@ -159,11 +159,11 @@ int main() {
                                 listaUsuarios->next();
                             }
                             if (existeServicio) {
-                                Area actual = servicios->getElement().getArea();
+                                string actual = servicios->getElement().getArea();
                                 Area objetivo;
                                 areas->goToStart();
                                 for (int i = 0; i < areas->getSize(); i++) {
-                                    if (areas->getElement().getDescripcion() == actual.getDescripcion()) {
+                                    if (areas->getElement().getDescripcion() == actual) {
                                         objetivo = areas->getElement();
                                         break;
                                     }
@@ -225,7 +225,7 @@ int main() {
             while (opcionPrincipal == "4") {
                 cout << "Escoja una opcion:" << endl;
                 cout << "\t1. Tipos de usuario." << endl;
-                cout << "\t2. Areas";
+                cout << "\t2. Areas" << endl;
                 cout << "\t3. Servicios disponibles." << endl;
                 cout << "\t4. Limpiar colas y estadisticas." << endl;
                 cout << "\t5. Regresar." << endl;
@@ -255,7 +255,7 @@ int main() {
                         string nuevaPrioridad;
                         cout << "Elija un nombre para el tipo de usuario:";
                         getline(cin, nuevoTipo);
-                        cout << "Elija una prioridad para" << nuevoTipo;
+                        cout << "Elija una prioridad para " << nuevoTipo << ": ";
                         getline(cin, nuevaPrioridad);
                         for (int i = 0; i < nuevaPrioridad.length(); i++) {  // Aca revisa elemento por elemento que si sean numeros, sino hace q escribas la opcion de nuevo
                             if (!isdigit(nuevaPrioridad[i])) {
@@ -272,7 +272,7 @@ int main() {
                     if (opcionSecundaria == "2") {  // La lista de tipos esta ordenada por orden de entrada entonces el usuario te va a dar ese numerito, luego del numerito vez el nomble porque en la otra si esta ordenado bien, y ese nombre lo buscas UNO POR UNO en el heap y lo borras
                         int indiceBorrar = 0;       // Big brain time
                         for (int i = 0; i < listaUsuarios->getSize(); i++) {
-                            cout << i << ". " << listaUsuarios->trueGetElement(i).getDescripcion() << endl;
+                            cout << i + 1 << ". " << listaUsuarios->trueGetElement(i).getDescripcion() << endl;
                         }
                         cout << "Elija una opcion a eliminar: ";
                         getline(cin, opcionSecundaria);
@@ -312,7 +312,7 @@ int main() {
                     // 1. Agregar
                     if (opcionSecundaria == "1") {  // El area debe tener descripcion, codigo y cantidad de ventanillas
                         string newAreaDesc;
-                        string newAreaCode;
+                        char newAreaCode;
                         string newAreaWindCount; // Asi bien gringo
                         cout << "Nombre del area: ";
                         getline(cin, newAreaDesc);
@@ -325,8 +325,10 @@ int main() {
                                 getline(cin, newAreaWindCount);
                             }
                         }
-                        char newAreaCode = newAreaDesc[0]; //bleh
-                        areas->insert(Area(newAreaDesc, newAreaCode, stoi(newAreaWindCount)));
+                        newAreaCode = newAreaDesc[0]; //bleh
+                        string ayudamePorfavor = "";
+                        string imSoDoneWithThis = newAreaCode + ayudamePorfavor; // Estas son las dos mejores lineas de codigo que he escrito en toda mi carrera
+                        areas->insert(Area(newAreaDesc, imSoDoneWithThis, stoi(newAreaWindCount)));
                     }
 
                     // 2. Modificar cantidad de ventanillas
@@ -410,7 +412,7 @@ int main() {
                                 getline(cin, opcionSecundaria);
                             }
                         }
-                        Servicio newSer = Servicio(newSerDesc, stoi(opcionSecundaria), newSerArea);
+                        Servicio newSer = Servicio(newSerDesc, stoi(opcionSecundaria), newSerArea.getDescripcion());
                         servicios->insert(newSer);
                         newSerArea.servicios->insert(servicios->trueGetElement(servicios->getSize() - 1)); // Ojito, podria echar error por (bullshit motivo)
                     }                                                                                       // Jose del futuro no esta siendo capaz de identificar el (bullshit motivo), recordarme poner comentarios mas detallados en el futuro
