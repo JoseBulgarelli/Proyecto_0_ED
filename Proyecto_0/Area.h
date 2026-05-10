@@ -35,22 +35,22 @@ public:
     Area(string descripcion, string codigo, int cantidadVentanillas) { //Crea un objeto Area con su descripción y el código para el tiquete.
         this->descripcion = descripcion;
         this->codigo = codigo;
-        this->cantidadVentanillas = cantidadVentanillas;
         cantidadTiquetesAtendidos = 0;
         cantidadTiquetes = 0;
         ventanillas = new LinkedList<Ventanilla>();
         tiquetes = new HeapPriorityQueue<Tiquete>();
         tiquetesAtendidos = new LinkedList<Tiquete>();
         servicios = new LinkedList<Servicio>();
+        cambiarCantidadVentanillas(cantidadVentanillas);
     }
 
     Area() {} //Crea un objeto vacío.
 
     ~Area() { //Destrulle el objeto Area.
-        servicios->clear();
-        ventanillas->clear();
-        delete servicios;
-        delete ventanillas;
+        // servicios->clear();
+        // ventanillas->clear();
+        // delete servicios;
+        // delete ventanillas;
     }
 
     void mostrarVentanillas() { //Muestra todas las ventanas de un Area.

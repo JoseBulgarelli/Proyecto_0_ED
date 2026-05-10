@@ -29,4 +29,5 @@ public:
 	virtual E trueGetElement(int pos) = 0;
 	virtual E trueRemove(int pos) = 0;
 	virtual void swap(int pos1, int pos2) = 0;
+	virtual bool isEmpty() = 0; // ???
 };

@@ -150,4 +150,8 @@ public:
 		goToPos(pos1);
 		setElement(temp2);
 	}
+
+	bool isEmpty() {
+		return size == 0;
+	}
 };
