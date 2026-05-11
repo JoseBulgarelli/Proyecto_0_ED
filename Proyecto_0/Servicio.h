@@ -37,7 +37,7 @@ public:
         return descripcion;
     }
 
-    string getArea() {
+    string getAreaDescripcion() {
         return areaDescripcion;
     }
 

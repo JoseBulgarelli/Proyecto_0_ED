@@ -176,7 +176,7 @@ int main() {
                                 servicioTiquete = getlinePeroNoTeDejaPonerVacio();
                                 indiceEleccion = comprobarIndice(servicioTiquete, servicios->getSize());
                                 Servicio servicioTiqueteAgarrar = servicios->trueGetElement(indiceEleccion);
-                                string actual = servicioTiqueteAgarrar.getDescripcion();
+                                string actual = servicioTiqueteAgarrar.getAreaDescripcion();
                                 Area objetivo;
                                 areas->goToStart();
                                 for (int i = 0; i < areas->getSize(); i++) {
