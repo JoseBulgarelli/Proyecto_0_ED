@@ -1,3 +1,11 @@
+// Clase principal del programa.
+// Muestra estado de colas.
+// Crea y atiende tiquetes.
+// Administra tipos de usuario, areas y servicios.
+// Muestra estadisticas.
+// Y sale del programa (xd).
+//Creadores: Jose Alberto Bulgarelli e Ignacio Castillo.
+
 // Los comentarios con espacio al inicio son de Jose, los que empiezan inmediatamente despues del // son de Ignacio
 
 #include <iostream>
