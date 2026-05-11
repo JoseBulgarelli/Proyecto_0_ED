@@ -41,6 +41,10 @@ public:
         return areaDescripcion;
     }
 
+    int getPrioridad() {
+        return prioridad;
+    }
+
     void setCantidadTiquetes(int cantidad) {
         cantidadTiquetes = cantidad;
     }

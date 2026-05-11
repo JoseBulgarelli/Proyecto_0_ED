@@ -31,6 +31,7 @@ bool revisarOpcion(string opcion, int cantidadOpciones) {
 string getlinePeroNoTeDejaPonerVacio() {
     string input;
     getline(cin, input);
+    cout << endl;
     if (input == "") {
         return " ";
     }
@@ -60,7 +61,7 @@ int comprobarIndice(string eleccion, int cantidadOpciones) {  // Repeti esto dos
     return indice - 1;
 }
 
-string sacaMete(List<string>* lista1, List<string>* lista2) {
+string sacaMete(List<string>* lista1, List<string>* lista2) {  // Si se uso este?
     string s = lista1->remove();
     lista2->append(s);
     return s;
@@ -94,6 +95,7 @@ int main() {
         List<Area>* areas = new LinkedList<Area>();
         PriorityQueue<string>* tiposUsuario = new HeapPriorityQueue<string>();
         List<Servicio>* servicios = new LinkedList<Servicio>();
+        int consecutivoTiquetes = 100;
         // Elegir una opcion:
         while (opcionPrincipal != "6") {
             cout << "Escoja una opcion:" << endl;
@@ -109,7 +111,7 @@ int main() {
                 cout << "Escriba una opcion valida: ";
                 opcionPrincipal = getlinePeroNoTeDejaPonerVacio();
             }
-            // 1. Estado de colas
+            // 1. Ver estado de las colas
             // Mostrar areas existentes, cantidad de ventanillas en cada area y codigos de los tiquetes presentes en las diferentes colas
             // Cada ventanilla muestra el ultimo tiquete atendido
             if (opcionPrincipal == "1") {
@@ -131,7 +133,7 @@ int main() {
                 }
             }
 
-            // 2. Tiquetes
+            // 2. Crear tiquete
             if (opcionPrincipal == "2") {
                 opcionSecundaria = "1";
                 while (opcionSecundaria == "1") {
@@ -147,90 +149,127 @@ int main() {
 
                     // 1. Seleccionar tipo de cliente y servicio
                     if (opcionSecundaria == "1") {
-                        string usuarioTiquete, servicioTiquete;
-                        bool existeUsuario = false;
-                        bool existeServicio = false;
-                        cout << "Escriba el tipo de usuario: ";
-                        usuarioTiquete = getlinePeroNoTeDejaPonerVacio();
-                        listaUsuarios->goToStart();
-                        for (int i = 0; i < listaUsuarios->getSize(); i++) {
-                            if (usuarioTiquete == listaUsuarios->getElement().getDescripcion()) {
-                                existeUsuario = true;
-                                break;
-                            }
-                            listaUsuarios->next();
+                        if (tiposUsuario->isEmpty()) {
+                            cout << "No hay tipos de usuario definidos." << endl;
                         }
-                        if (existeUsuario) {
-                            cout << "Escoja el servicio: ";
-                            servicioTiquete = getlinePeroNoTeDejaPonerVacio();
-                            servicios->goToStart();
-                            for (int i = 0; i < servicios->getSize(); i++) {
-                                if (servicioTiquete == servicios->getElement().getDescripcion()) {
-                                    existeServicio = true;
+                        else {
+                            string usuarioTiquete, servicioTiquete;
+                            bool existeUsuario = false;
+                            bool existeServicio = false; // Las palabras del profesor Aviles resuenan en tu cabeza: "El usuario no tiene porque recordar algo que ya no se observa en pantalla" (muestra la lista de opciones antes de pedir elegir una)
+                            for (int i = 0; i < listaUsuarios->getSize(); i++) {
+                                cout << "\t" << i + 1 << ". " << listaUsuarios->trueGetElement(i).getDescripcion() << endl;
+                            }
+                            cout << "Escriba el tipo de usuario: "; // Tmb hacer que aca escribas el numero de la opcion, no el nombre (siento que es mas comodo pero realmente no afecta en mucho)
+                            usuarioTiquete = getlinePeroNoTeDejaPonerVacio();
+                            Usuario usuarioTiqueteAgarrar;
+                            listaUsuarios->goToStart();
+                            for (int i = 0; i < listaUsuarios->getSize(); i++) {
+                                if (usuarioTiquete == listaUsuarios->getElement().getDescripcion()) {
+                                    existeUsuario = true;
+                                    usuarioTiqueteAgarrar = listaUsuarios->getElement();
                                     break;
                                 }
                                 listaUsuarios->next();
                             }
-                            if (existeServicio) {
-                                string actual = servicios->getElement().getArea();
-                                Area objetivo;
-                                areas->goToStart();
-                                for (int i = 0; i < areas->getSize(); i++) {
-                                    if (areas->getElement().getDescripcion() == actual) {
-                                        objetivo = areas->getElement();
-                                        break;
+                            if (existeUsuario) {
+                                if (servicios->isEmpty()) {
+                                    cout << "No hay servicios definidos." << endl;
+                                }
+                                else {
+                                    for (int i = 0; i < servicios->getSize(); i++) {
+                                        cout << "\t" << i + 1 << ". " << servicios->trueGetElement(i).descripcion << endl;
                                     }
+                                    cout << "Escoja el servicio: ";
+                                    servicioTiquete = getlinePeroNoTeDejaPonerVacio();
+                                    Servicio servicioTiqueteAgarrar;
+                                    servicios->goToStart();
+                                    for (int i = 0; i < servicios->getSize(); i++) {
+                                        if (servicioTiquete == servicios->getElement().getDescripcion()) {
+                                            existeServicio = true;
+                                            servicioTiqueteAgarrar = servicios->getElement();
+                                            break;
+                                        }
+                                        listaUsuarios->next();
+                                    }
+                                    if (existeServicio) {
+                                        string actual = servicios->getElement().getArea();
+                                        Area objetivo;
+                                        areas->goToStart();
+                                        for (int i = 0; i < areas->getSize(); i++) {
+                                            if (areas->getElement().getDescripcion() == actual) {
+                                                objetivo = areas->getElement();
+                                                break;
+                                            }
+                                        }
+                                        Tiquete winningTicket = Tiquete(objetivo.getCodigo() + to_string(consecutivoTiquetes));
+                                        objetivo.agregarTiquete(winningTicket, usuarioTiqueteAgarrar.getPrioridad() * 10 + servicioTiqueteAgarrar.getPrioridad());
+                                        areas->setElement(objetivo);
+                                        usuarioTiqueteAgarrar.agregarTiquete();
+                                        listaUsuarios->setElement(usuarioTiqueteAgarrar); // Those who spaguetti
+                                        // cout << usuarioTiqueteAgarrar.getCantidadTiquetes() << "!!!!!!!!!!!!!!!!!" << endl;
+                                        servicioTiqueteAgarrar.agregarTiquete();
+                                        servicios->setElement(servicioTiqueteAgarrar);
+                                        consecutivoTiquetes += 1;
+                                    }
+                                    else
+                                        cout << "El servicio no existe." << endl;
                                 }
                             }
                             else
-                                cout << "El servicio no existe." << endl;
+                                cout << "El usuario no existe." << endl;
                         }
-                        else
-                            cout << "El usuario no existe." << endl;
                     }
                 }
 
                 // 2. Regresar
 
-
             }
 
-            // 3. Atender
+            // 3. Atender Tiquete
             if (opcionPrincipal == "3") {
-                string areaAtender, ventanillaAtender;
-                int posicionArea;
-                cout << "Escoja el area a atender: ";
-                areaAtender = getlinePeroNoTeDejaPonerVacio();
-                bool areaExiste = false;
-                areas->goToStart();
-                for (int i = 0; i < areas->getSize(); i++) {
-                    if (areas->getElement().getDescripcion() == areaAtender) {
-                        areaExiste = true;
-                        posicionArea = i;
-                        break;
-                    }
-                    areas->next();
-                }
-                if (areaExiste && areas->getElement().getCantidadVentanillas() == 0)
-                    cout << "No hay ventanillas en esta area." << endl;
-                else if (areaExiste && areas->getElement().getCantidadTiquetes() == 0)
-                    cout << "No hay tiquetes en esta area." << endl;
-                else if (areaExiste) {
-                    Area areaActual = areas->getElement();
-                    cout << "Escoja la ventanilla a atender:" << endl;
-                    areaActual.mostrarVentanillas();
-                    ventanillaAtender = getlinePeroNoTeDejaPonerVacio();
-                    if (!areaActual.ventanillaExiste(ventanillaAtender))
-                        cout << "La ventanilla no existe." << endl;
-                    else {
-                        //Atiende el tiquete quitandolo del heap al que pertenece.
-                        int posicionVentanilla = areaActual.posicionVentanilla(ventanillaAtender);
-                        areaActual.getVentanilla(posicionVentanilla).agregarAtendido();
-                        areaActual.atenderTiquete(ventanillaAtender);
-                    }
+                if (areas->isEmpty()) {
+                    cout << "No hay areas en donde atender tiquetes." << endl;
                 }
                 else {
-                    cout << "El area no existe." << endl;
+                    string areaAtender, ventanillaAtender;
+                    int posicionArea;
+                    for (int i = 0; i < areas->getSize(); i++) {
+                        cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
+                    }
+                    cout << "Escoja el area a atender: ";
+                    areaAtender = getlinePeroNoTeDejaPonerVacio();
+                    bool areaExiste = false;
+                    areas->goToStart();
+                    for (int i = 0; i < areas->getSize(); i++) {
+                        if (areas->getElement().getDescripcion() == areaAtender) {
+                            areaExiste = true;
+                            posicionArea = i;
+                            break;
+                        }
+                        areas->next();
+                    }
+                    if (areaExiste && areas->getElement().getCantidadVentanillas() == 0)
+                        cout << "No hay ventanillas en esta area." << endl;
+                    else if (areaExiste && areas->getElement().getCantidadTiquetes() == 0)
+                        cout << "No hay tiquetes en esta area." << endl;
+                    else if (areaExiste) {
+                        Area areaActual = areas->getElement();
+                        cout << "Escoja la ventanilla a atender:" << endl;
+                        areaActual.mostrarVentanillas();
+                        ventanillaAtender = getlinePeroNoTeDejaPonerVacio();
+                        if (!areaActual.ventanillaExiste(ventanillaAtender))
+                            cout << "La ventanilla no existe." << endl;  // Algo aqui salio mal
+                        else {
+                            //Atiende el tiquete quitandolo del heap al que pertenece.
+                            int posicionVentanilla = areaActual.posicionVentanilla(ventanillaAtender);
+                            areaActual.getVentanilla(posicionVentanilla).agregarAtendido();
+                            areaActual.atenderTiquete(ventanillaAtender);
+                            areas->setElement(areaActual);
+                        }
+                    }
+                    else {
+                        cout << "El area no existe." << endl;
+                    }
                 }
             }
 
@@ -266,7 +305,7 @@ int main() {
                     if (opcionSecundaria == "1") {
                         string nuevoTipo;
                         string nuevaPrioridad;
-                        cout << "Elija un nombre para el tipo de usuario:";
+                        cout << "Elija un nombre para el tipo de usuario: ";
                         nuevoTipo = getlinePeroNoTeDejaPonerVacio();
                         cout << "Elija una prioridad para " << nuevoTipo << ": ";
                         nuevaPrioridad = getlinePeroNoTeDejaPonerVacio();
@@ -278,34 +317,38 @@ int main() {
                             }
                         }
                         tiposUsuario->insert(nuevoTipo, stoi(nuevaPrioridad)); // Se inserta el nuevo tipo de usuario con el nombre y prioridad que elija el usuario
-                        listaUsuarios->insert(Usuario(nuevoTipo));
+                        listaUsuarios->append(Usuario(nuevoTipo, stoi(nuevaPrioridad)));
+                        opcionSecundaria = "1";
                     }
 
                     // 2. Eliminar
                     else if (opcionSecundaria == "2") {  // La lista de tipos esta ordenada por orden de entrada entonces el usuario te va a dar ese numerito, luego del numerito vez el nomble porque en la otra si esta ordenado bien, y ese nombre lo buscas UNO POR UNO en el heap y lo borras
-                        int indiceBorrar = 0;       // Big brain time
-                        for (int i = 0; i < listaUsuarios->getSize(); i++) {
-                            cout << i + 1 << ". " << listaUsuarios->trueGetElement(i).getDescripcion() << endl;
+                        if (listaUsuarios->isEmpty()) {  // Gracias a dios nunca hice esa locura de ahi arriba
+                            cout << "No hay tipos de usuario." << endl;
                         }
-                        cout << "Elija una opcion a eliminar: ";
-                        opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
-                        indiceBorrar = comprobarIndice(opcionSecundaria, listaUsuarios->getSize());
-                        string hayQueBorrar = listaUsuarios->trueRemove(indiceBorrar).getDescripcion();  // Eso ya no puede ser un string si tipo de usuario se hace su propia clase
-                        string buscandoANemo = "Es imposible que pongas un tipo de usuario que sea ASI de forma que NUNCA va a fallar esto, osea tiene quwe hitear todos los caracteres INCLUSO los typos, mira pongo cosas aleatorias para que de FIJO no lo pegues, SJKHSFUISGFYUIHWJFASHGFJHSAVDIBJFKHAHOIFW, wabam";
-                        for (int i = 0; buscandoANemo != hayQueBorrar; i++) {
-                            if (tiposUsuario->getElement(i) == hayQueBorrar) {
-                                buscandoANemo = tiposUsuario->remove(i);
+                        else {
+                            int indiceBorrar = 0;       // Big brain time
+                            for (int i = 0; i < listaUsuarios->getSize(); i++) {
+                                cout << "\t" << i + 1 << ". " << listaUsuarios->trueGetElement(i).getDescripcion() << endl;
+                            }
+                            cout << "Elija una opcion a eliminar: ";
+                            opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                            indiceBorrar = comprobarIndice(opcionSecundaria, listaUsuarios->getSize());
+                            string hayQueBorrar = listaUsuarios->trueRemove(indiceBorrar).getDescripcion();  // Eso ya no puede ser un string si tipo de usuario se hace su propia clase
+                            string buscandoANemo = "Es imposible que pongas un tipo de usuario que sea ASI de forma que NUNCA va a fallar esto, osea tiene quwe hitear todos los caracteres INCLUSO los typos, mira pongo cosas aleatorias para que de FIJO no lo pegues, SJKHSFUISGFYUIHWJFASHGFJHSAVDIBJFKHAHOIFW, wabam";
+                            for (int i = 0; buscandoANemo != hayQueBorrar; i++) {
+                                if (tiposUsuario->getElement(i) == hayQueBorrar) {
+                                    buscandoANemo = tiposUsuario->remove(i);
+                                }
                             }
                         }
+                        opcionSecundaria = "1";
                     }
 
                     // 3. Regresar
                     else if (opcionSecundaria == "3") {
                         opcionSecundaria = "0";
                     }
-
-                    else
-                        opcionSecundaria = "1";
                 }
 
                 // 2. Areas
@@ -341,52 +384,62 @@ int main() {
                         newAreaCode = newAreaDesc[0]; //bleh   // EL MISMO MALDITO ERROR, TODOS LOS CAMINOS LLEVAN AL BLEH   // Veces que esta linea da problemas count: |||
                         string ayudamePorfavor = "";
                         string imSoDoneWithThis = newAreaCode + ayudamePorfavor; // Estas son las dos mejores lineas de codigo que he escrito en toda mi carrera
-                        areas->insert(Area(newAreaDesc, imSoDoneWithThis, stoi(newAreaWindCount)));
+                        areas->append(Area(newAreaDesc, imSoDoneWithThis, stoi(newAreaWindCount)));
+                        opcionSecundaria = "2";
                     }
 
                     // 2. Modificar cantidad de ventanillas
                     else if (opcionSecundaria == "2") {
-                        int indiceEleccion; // A falta de mejores nombres
-                        string areaNewWindCount;
-                        for (int i = 0; i < areas->getSize(); i++) {
-                            cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
+                        if (areas->isEmpty()) {
+                            cout << "No hay areas definidas." << endl;
                         }
-                        cout << "Elija el area a modificar: ";
-                        opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
-                        indiceEleccion = comprobarIndice(opcionSecundaria, areas->getSize());
-                        cout << "Cantidad de ventanillas en " << areas->trueGetElement(indiceEleccion).descripcion << ": " << areas->trueGetElement(indiceEleccion).ventanillas << endl;
-                        cout << "Cantidad nueva de ventanillas: ";
-                        opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
-                        for (int i = 0; i < opcionSecundaria.length(); i++) {
-                            if (!isdigit(opcionSecundaria[i])) {
-                                i = -1;
-                                cout << "Escriba una opcion valida: ";
-                                opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                        else {
+                            int indiceEleccion; // A falta de mejores nombres
+                            string areaNewWindCount;
+                            for (int i = 0; i < areas->getSize(); i++) {
+                                cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
                             }
+                            cout << "Elija el area a modificar: ";
+                            opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                            indiceEleccion = comprobarIndice(opcionSecundaria, areas->getSize());
+                            cout << "Cantidad de ventanillas en " << areas->trueGetElement(indiceEleccion).descripcion << ": " << areas->trueGetElement(indiceEleccion).getCantidadVentanillas() << endl;
+                            cout << "Cantidad nueva de ventanillas: ";
+                            opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                            for (int i = 0; i < opcionSecundaria.length(); i++) {
+                                if (!isdigit(opcionSecundaria[i])) {
+                                    i = -1;
+                                    cout << "Escriba una opcion valida: ";
+                                    opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                                }
+                            }
+                            Area imSoFrickinScared = areas->trueGetElement(indiceEleccion);
+                            imSoFrickinScared.cambiarCantidadVentanillas(stoi(opcionSecundaria));
+                            areas->setElement(imSoFrickinScared);
                         }
-                        areas->trueGetElement(indiceEleccion).cambiarCantidadVentanillas(stoi(opcionSecundaria));
                         opcionSecundaria = "2";
                     }
 
                     // 3. Eliminar
                     else if (opcionSecundaria == "3") {
-                        for (int i = 0; i < areas->getSize(); i++) {
-                            cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
+                        if (areas->isEmpty()) {
+                            cout << "No se han creado areas." << endl;
                         }
-                        cout << "Elija el area a eliminar: ";
-                        opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
-                        int indiceBorrar = comprobarIndice(opcionSecundaria, areas->getSize());
-                        areas->trueRemove(indiceBorrar);
+                        else {
+                            for (int i = 0; i < areas->getSize(); i++) {
+                                cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
+                            }
+                            cout << "Elija el area a eliminar: ";
+                            opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                            int indiceBorrar = comprobarIndice(opcionSecundaria, areas->getSize());
+                            areas->trueRemove(indiceBorrar);
+                        }
+                        opcionSecundaria = "2";
                     }
 
                     // 4. Regresar
                     else if (opcionSecundaria == "4") {
                         opcionSecundaria = "0";
                     }
-
-                    else
-                        opcionSecundaria = "2";
-
                 }
 
                 // 3. Servicios disponibles
@@ -405,50 +458,62 @@ int main() {
 
                     // 1. Agregar
                     if (opcionSecundaria == "1") {
-                        string newSerDesc;
-                        Area newSerArea;                // Ser = Servicio
-                        cout << "Elija un nombre para el servicio: ";
-                        newSerDesc = getlinePeroNoTeDejaPonerVacio();
-                        for (int i = 0; i < areas->getSize(); i++) {
-                            cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
+                        if (areas->isEmpty()) {
+                            cout << "No se puede agregar un servicio sin haber definido al menos un area." << endl;
                         }
-                        cout << "Elija a que area pertenece el servicio: ";
-                        opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
-                        int opcionSecundariaPeroConDistintoNombre = comprobarIndice(opcionSecundaria, areas->getSize());
-                        newSerArea = areas->trueGetElement(opcionSecundariaPeroConDistintoNombre);
-                        string variableQueNoHaceNada = "*No hace nada*";
-                        cout << "Elija la prioridad de " << newSerDesc << ": ";
-                        opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
-                        for (int i = 0; i < opcionSecundaria.length(); i++) {
-                            if (!isdigit(opcionSecundaria[i])) {
-                                i = -1;
-                                cout << "Escriba una opcion valida: ";
-                                opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                        else {
+                            string newSerDesc;
+                            Area newSerArea;                // Ser = Servicio
+                            cout << "Elija un nombre para el servicio: ";
+                            newSerDesc = getlinePeroNoTeDejaPonerVacio();
+                            for (int i = 0; i < areas->getSize(); i++) {
+                                cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
                             }
-                        }
-                        Servicio newSer = Servicio(newSerDesc, stoi(opcionSecundaria), newSerArea.getDescripcion());
-                        servicios->insert(newSer);
-                        newSerArea.servicios->insert(servicios->trueGetElement(servicios->getSize() - 1)); // Ojito, podria echar error por (bullshit motivo)
-                    }                                                                                       // Jose del futuro no esta siendo capaz de identificar el (bullshit motivo), recordarme poner comentarios mas detallados en el futuro
+                            cout << "Elija a que area pertenece el servicio: ";
+                            opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                            int opcionSecundariaPeroConDistintoNombre = comprobarIndice(opcionSecundaria, areas->getSize());
+                            newSerArea = areas->trueGetElement(opcionSecundariaPeroConDistintoNombre);
+                            string variableQueNoHaceNada = "*No hace nada*";
+                            cout << "Elija la prioridad de " << newSerDesc << ": ";
+                            opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                            for (int i = 0; i < opcionSecundaria.length(); i++) {
+                                if (!isdigit(opcionSecundaria[i])) {
+                                    i = -1;
+                                    cout << "Escriba una opcion valida: ";
+                                    opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
+                                }
+                            }
+                            Servicio newSer = Servicio(newSerDesc, stoi(opcionSecundaria), newSerArea.getDescripcion());
+                            servicios->append(newSer);
+                            newSerArea.servicios->append(servicios->trueGetElement(servicios->getSize() - 1)); // Ojito, podria echar error por (bullshit motivo)
+                        }                                                                                      // Jose del futuro no esta siendo capaz de identificar el (bullshit motivo), recordarme poner comentarios mas detallados en el futuro
+                        opcionSecundaria = "3";                                                                // Jose del futuro del futuro si logro identificar (bullshit motivo), no aprendere nada de esta experiencia 
+                    }
 
                     // 2. Eliminar
                     else if (opcionSecundaria == "2") {  // Hay q quitar el servicio de la lista de servicios y del area donde esta
-                        for (int i = 0; i < servicios->getSize(); i++) {
-                            cout << "\t" << i + 1 << ". " << servicios->trueGetElement(i).descripcion << endl;
+                        if (servicios->isEmpty()) {
+                            cout << "No hay ningun servicio." << endl;
                         }
-                        cout << "Elija el servicio a eliminar";
-                        int indiceBorrar = comprobarIndice(opcionSecundaria, servicios->getSize());
-                        Servicio serBorrar = servicios->trueRemove(indiceBorrar);
-                        Servicio buscandoANemo;
-                        for (int i = 0; buscandoANemo.getDescripcion() != serBorrar.getDescripcion(); i++) {  // ?
-                            for (int b = 0; b < areas->trueGetElement(i).getCantidadVentanillas() || buscandoANemo.getDescripcion() != serBorrar.getDescripcion(); b++) {
-                                if (areas->trueGetElement(i).getServicio(b).getDescripcion() == serBorrar.getDescripcion()) {
-                                    buscandoANemo = areas->trueGetElement(i).getServicios()->trueRemove(b);
+                        else {
+                            for (int i = 0; i < servicios->getSize(); i++) {
+                                cout << "\t" << i + 1 << ". " << servicios->trueGetElement(i).descripcion << endl;
+                            }
+                            cout << "Elija el servicio a eliminar";
+                            int indiceBorrar = comprobarIndice(opcionSecundaria, servicios->getSize());
+                            Servicio serBorrar = servicios->trueRemove(indiceBorrar);
+                            Servicio buscandoANemo;
+                            for (int i = 0; buscandoANemo.getDescripcion() != serBorrar.getDescripcion(); i++) {  // ?
+                                for (int b = 0; b < areas->trueGetElement(i).getCantidadVentanillas() || buscandoANemo.getDescripcion() != serBorrar.getDescripcion(); b++) {
+                                    if (areas->trueGetElement(i).getServicio(b).getDescripcion() == serBorrar.getDescripcion()) {
+                                        buscandoANemo = areas->trueGetElement(i).getServicios()->trueRemove(b);
+                                    }
                                 }
                             }
+                            // Gracias por todo Nemo
+                            //y virgulilla
                         }
-                        // Gracias por todo Nemo
-                        //y virgulilla
+                        opcionSecundaria = "3";
                     }
 
                     // 3. Reordenar
@@ -472,15 +537,13 @@ int main() {
                             }
                             servicios->swap(stoi(pos1) - 1, stoi(pos2) - 1);
                         }
+                        opcionSecundaria = "3";
                     }
 
                     // 4. Regresar
                     else if (opcionSecundaria == "4") {
                         opcionSecundaria = "0";
                     }
-
-                    else
-                        opcionSecundaria = "3";
                 }
 
                 // 4. Limpiar colas y estadisticas
@@ -523,16 +586,18 @@ int main() {
                         Area actual = areas->getElement();
                         actual.tiquetesAtendidos->goToStart();
                         for (int j = 0; j < actual.cantidadTiquetesAtendidos; j++) {
-                            tiempo += actual.tiquetesAtendidos->getElement().atendido;
+                            tiempo += actual.tiquetesAtendidos->getElement().getEspera();
                             actual.tiquetesAtendidos->next();
                         }
                         cout << "\tArea: " << actual.descripcion << "." << endl;
-                        if (actual.cantidadTiquetesAtendidos == 0) {
+                        if (actual.getCantidadTiquetesAtendidos() == 0) {
                             cout << "\tNo hay tiquetes atendidos." << endl;
                         }
+                        else if (tiempo == 0) {
+                            cout << "\tNo hay tiempo de espera." << endl;
+                        }
                         else {
-                            cout << "\tTiempo promedio: " << tiempo / actual.cantidadTiquetesAtendidos
-                                << "." << endl;
+                            cout << "\tTiempo promedio: " << tiempo / actual.getCantidadTiquetesAtendidos() << "." << endl;
                         }
                         areas->next();
                     }
@@ -547,6 +612,7 @@ int main() {
                     for (int i = 0; i < areas->getSize(); i++) {   // Hacer que esto muestre la cantidad de tiquetes CREADOS por area
                         cout << "\tArea: " << areas->getElement().descripcion;
                         cout << "\tTiquetes " << areas->getElement().cantidadTiquetes;
+                        areas->next();
                     }
                     cout << endl;
                     cout << "Cantidad de tiquetes atendidos por ventanilla: " << endl;
@@ -572,8 +638,7 @@ int main() {
                 else {
                     listaUsuarios->goToStart();
                     for (int i = 0; i < listaUsuarios->getSize(); i++) {
-                        cout << listaUsuarios->getElement().getDescripcion() << ": " <<
-                            listaUsuarios->getElement().getCantidadTiquetes() << "." << endl;
+                        cout << listaUsuarios->getElement().getDescripcion() << ": " << listaUsuarios->getElement().getCantidadTiquetes() << "." << endl;
                         listaUsuarios->next();
                     }
                 }

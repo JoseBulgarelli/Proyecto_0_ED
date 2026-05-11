@@ -13,9 +13,11 @@ class Usuario {
 public:
     string descripcion;
     int cantidadTiquetes;
+    int prioridad;
 
-    Usuario(string descripcion) {
+    Usuario(string descripcion, int prioridad) {
         this->descripcion = descripcion;
+        this->prioridad = prioridad;
         cantidadTiquetes = 0;
     }
 
@@ -35,6 +37,10 @@ public:
 
     int getCantidadTiquetes() {
         return cantidadTiquetes;
+    }
+
+    int getPrioridad() {
+        return prioridad;
     }
 
     void setCantidadTiquetes(int cantidad) {

@@ -33,6 +33,10 @@ public:
         espera = atendido - creacion;
     }
 
+    time_t getEspera() {
+        return espera;
+    }
+
     friend ostream& operator <<(ostream& os, const Tiquete& tiquete) {
         os << tiquete.nombre;
         return os;

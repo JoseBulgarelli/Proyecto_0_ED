@@ -38,7 +38,7 @@ public:
         cantidadTiquetesAtendidos = 0;
         cantidadTiquetes = 0;
         ventanillas = new LinkedList<Ventanilla>();
-        tiquetes = new HeapPriorityQueue<Tiquete>();
+        this->tiquetes = new HeapPriorityQueue<Tiquete>();
         tiquetesAtendidos = new LinkedList<Tiquete>();
         servicios = new LinkedList<Servicio>();
         cambiarCantidadVentanillas(cantidadVentanillas);
@@ -62,6 +62,7 @@ public:
             throw runtime_error("Cantidad de ventanas fuera de rango.");
         cantidadVentanillas = cantidad;
         ventanillas->clear();
+        ventanillas->goToStart();
         Ventanilla ventanilla;
         for (int i = 1; i <= cantidad; i++) {
             ventanilla = Ventanilla(0, codigo + to_string(i));
@@ -85,8 +86,16 @@ public:
         return servicios;
     }
 
+    string getCodigo() {
+        return codigo;
+    }
+
     int getCantidadTiquetes() {
         return tiquetes->getSize();
+    }
+
+    int getCantidadTiquetesAtendidos() {
+        return cantidadTiquetesAtendidos;
     }
 
     int getCantidadVentanillas() {
@@ -95,17 +104,24 @@ public:
 
     bool ventanillaExiste(string nombre) {
         ventanillas->goToStart();
-        for (int i = 0; i < cantidadVentanillas; i++)
-            if (ventanillas->getElement().getNombre() == nombre)
+        for (int i = 0; i < cantidadVentanillas; i++) {
+            if (ventanillas->getElement().getNombre() == nombre)  // Faltaba el next() (creo????)
                 return true;
+            if (i + 1 != cantidadVentanillas)
+                ventanillas->next();
+        }
+        ventanillas->goToStart();
         return false;
     }
 
     int posicionVentanilla(string nombre) {
         ventanillas->goToStart();
-        for (int i = 0; i < cantidadVentanillas; i++)
+        for (int i = 0; i < cantidadVentanillas; i++) {
             if (ventanillas->getElement().nombre == nombre)
                 return i;
+            if (i + 1 != cantidadVentanillas)
+                ventanillas->next();
+        }
     }
 
     void agregarTiquete(Tiquete tiquete, int prioridad) {
@@ -116,13 +132,17 @@ public:
     void atenderTiquete(string ventanilla) {
         cantidadTiquetesAtendidos++;
         ventanillas->goToStart();
+        Ventanilla yoinkySploinky;
         for (int i = 0; i < ventanillas->getSize(); i++) {
             if (ventanillas->getElement().nombre == ventanilla) {
-                ventanillas->getElement().setUltimoAtendido(tiquetes->min().nombre);
+                yoinkySploinky = ventanillas->getElement();
+                yoinkySploinky.setUltimoAtendido(tiquetes->min().nombre);
+                yoinkySploinky.agregarAtendido();
                 break;
             }
             ventanillas->next();
         }
+        ventanillas->setElement(yoinkySploinky);
         Tiquete T = tiquetes->removeMin();
         T.atender();
         tiquetesAtendidos->append(T);
