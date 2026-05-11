@@ -102,6 +102,10 @@ public:
         return cantidadVentanillas;
     }
 
+    int getCantidadServicios() {
+        return servicios->getSize();
+    }
+
     bool ventanillaExiste(string nombre) {
         ventanillas->goToStart();
         for (int i = 0; i < cantidadVentanillas; i++) {
