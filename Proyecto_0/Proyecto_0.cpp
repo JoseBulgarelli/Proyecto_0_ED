@@ -65,7 +65,6 @@ int comprobarIndice(string eleccion, int cantidadOpciones) {  // Repeti esto dos
         if (indice > cantidadOpciones || indice <= 0) {
             cout << "Escriba una opcion valida: ";
             eleccion = getlinePeroNoTeDejaPonerVacio();
-
         }
     }
     return indice - 1;
@@ -82,8 +81,8 @@ void sacaMeteVoid(List<string>* lista1, List<string>* lista2) { // Y este?
     lista2->append(s);
 }
 
-void printUsuarios(LinkedList<string>* usuarios) {
-    List<string>* temp = new LinkedList<string>();
+void printUsuarios(LinkedList<string>* usuarios) {  // Si se usan!! En este!!
+    List<string>* temp = new LinkedList<string>();  //Y este no se usa
     string nombre;
     int contador = usuarios->getSize();
     for (int i = 0; i < contador; i++) {
@@ -126,10 +125,34 @@ int main() {
             // Cada ventanilla muestra el ultimo tiquete atendido
             if (opcionPrincipal == "1") {
                 cout << "Areas existentes:" << endl;
+                if (areas->isEmpty()) {
+                    cout << "\tNo hay areas definidas." << endl << endl;
+                }
                 areas->goToStart();
                 for (int i = 0; i < areas->getSize(); i++) {
                     Area a = areas->getElement();
-                    cout << "\t" << a << endl;
+                    cout << a << endl;
+
+                    cout << "\tServicios del area y sus tiquetes en cola:" << endl;
+                    a.servicios->goToStart();  // Innecesario?
+                    if (a.servicios->isEmpty()) {
+                        cout << "\t\tEl area no tiene servicios." << endl;
+                    }
+                    else {
+                        for (int j = 0; j < a.servicios->getSize(); j++) {
+                            Servicio s = a.servicios->getElement();
+                            cout << "\t\t" << s << "." << endl;
+                            a.servicios->next();
+                        }
+                        cout << endl << "\tTiquetes en cola de " << a << ": ";
+                        if (a.tiquetes->isEmpty()) {
+                            cout << "\t\tEl area " << a << " no tiene tiquetes en cola." << endl;
+                        }
+                        else {
+                            a.tiquetes->print(); // A probar
+                            cout << endl;
+                        }
+                    }
                     cout << "\tVentanillas del area y sus ultimos atendidos:" << endl;
                     a.ventanillas->goToStart();
                     for (int j = 0; j < a.ventanillas->getSize(); j++) {
@@ -141,7 +164,12 @@ int main() {
                             cout << "No hay un ultimo atendido." << endl;
                         a.ventanillas->next();
                     }
+                    areas->next();
+                    a.servicios->goToStart();
+                    a.ventanillas->goToStart();
+                    cout << endl;
                 }
+                areas->goToStart();
             }
 
             // 2. Crear tiquete
@@ -207,9 +235,7 @@ int main() {
                         }
                     }
                 }
-
                 // 2. Regresar
-
             }
 
             // 3. Atender Tiquete
@@ -223,9 +249,11 @@ int main() {
                     for (int i = 0; i < areas->getSize(); i++) {
                         cout << "\t" << i + 1 << ". " << areas->trueGetElement(i).descripcion << endl;
                     }
+                    areas->goToStart(); // Redundante ahora que lo pienso, por el goToPos de mas adelante
                     cout << "Elija el area a atender: ";
                     areaAtender = getlinePeroNoTeDejaPonerVacio();
                     int indiceEleccion = comprobarIndice(areaAtender, areas->getSize());
+                    areas->goToPos(indiceEleccion);
                     if (areas->getElement().getCantidadVentanillas() == 0)
                         cout << "No hay ventanillas en esta area." << endl;
                     else if (areas->getElement().getCantidadTiquetes() == 0)
@@ -310,7 +338,7 @@ int main() {
                             opcionSecundaria = getlinePeroNoTeDejaPonerVacio();
                             indiceBorrar = comprobarIndice(opcionSecundaria, listaUsuarios->getSize());
                             string hayQueBorrar = listaUsuarios->trueRemove(indiceBorrar).getDescripcion();  // Eso ya no puede ser un string si tipo de usuario se hace su propia clase
-                            string buscandoANemo = "Es imposible que pongas un tipo de usuario que sea ASI de forma que NUNCA va a fallar esto, osea tiene quwe hitear todos los caracteres INCLUSO los typos, mira pongo cosas aleatorias para que de FIJO no lo pegues, SJKHSFUISGFYUIHWJFASHGFJHSAVDIBJFKHAHOIFW, wabam";
+                            string buscandoANemo = "Es imposible que pongas un tipo de usuario que sea ASI de forma que NUNCA va a fallar esto, osea tiene quwe hitear todos los caracteres INCLUSO los typos, mira pongo cosas aleatorias para que de FIJO no lo pegues, SJKHSFUISGFYUIHWJFASHGFJHSAVDIBJFKHAHOIFW, wabam"; // Innecesario btw
                             for (int i = 0; buscandoANemo != hayQueBorrar; i++) {
                                 if (tiposUsuario->getElement(i) == hayQueBorrar) {
                                     buscandoANemo = tiposUsuario->remove(i);
@@ -461,8 +489,9 @@ int main() {
                             Servicio newSer = Servicio(newSerDesc, stoi(opcionSecundaria), newSerArea.getDescripcion());
                             servicios->append(newSer);
                             newSerArea.servicios->append(servicios->trueGetElement(servicios->getSize() - 1)); // Ojito, podria echar error por (bullshit motivo)
-                        }                                                                                      // Jose del futuro no esta siendo capaz de identificar el (bullshit motivo), recordarme poner comentarios mas detallados en el futuro
-                        opcionSecundaria = "3";                                                                // Jose del futuro del futuro si logro identificar (bullshit motivo), no aprendere nada de esta experiencia 
+                            areas->setElement(newSerArea);                                                     // Jose del futuro no esta siendo capaz de identificar el (bullshit motivo), recordarme poner comentarios mas detallados en el futuro
+                        }                                                                                      // Jose del futuro del futuro si logro identificar (bullshit motivo), no aprendere nada de esta experiencia 
+                        opcionSecundaria = "3";                                                                
                     }
 
                     // 2. Eliminar
@@ -480,12 +509,15 @@ int main() {
                             Servicio serBorrar = servicios->trueRemove(indiceBorrar);
                             Servicio buscandoANemo;
                             for (int i = 0; buscandoANemo.getDescripcion() != serBorrar.getDescripcion(); i++) {  // ?
-                                for (int b = 0; b < areas->trueGetElement(i).getCantidadServicios() || buscandoANemo.getDescripcion() != serBorrar.getDescripcion(); b++) {
+                                for (int b = 0; b < areas->trueGetElement(i).getCantidadServicios() && buscandoANemo.getDescripcion() != serBorrar.getDescripcion(); b++) {
                                     if (areas->trueGetElement(i).getServicio(b).getDescripcion() == serBorrar.getDescripcion()) {
                                         buscandoANemo = areas->trueGetElement(i).getServicios()->trueRemove(b);
                                     }  // No se que cojones estaba yo pensando cuando escribi toda esta bullshit, unos dias despues estoy completamente confundido pero confio en cualquiera haya sido la vision que tuve en su momento
                                 }      //Yo tampoco tengo ni idea de que dice ahi
                             }          // SI SIRVE (gracias, Jose lucido de aquel dia, por escribir esta parte que ni el Jose actual logra entender)
+                            cout << "4" << endl;
+                            areas->goToStart();
+                            servicios->goToStart();
                             // Gracias por todo Nemo
                             //y virgulilla
                         }
@@ -579,7 +611,7 @@ int main() {
                     }
                 }
                 cout << endl;
-                cout << "Cantidad de tiquetes por area: " << endl;
+                cout << "Cantidad de tiquetes dispensados por area: " << endl;
                 if (areas->isEmpty()) {
                     cout << "\t No hay areas." << endl;
                 }
@@ -607,7 +639,7 @@ int main() {
                     }
                 }
                 cout << endl;
-                cout << "Cantidad de tiquetes por servicio:" << endl;
+                cout << "Cantidad de tiquetes dispensados por servicio:" << endl;
                 if (servicios->isEmpty()) {
                     cout << "\tNo hay servicios definidos." << endl;
                 }
@@ -620,7 +652,7 @@ int main() {
                     }
                 }
                 cout << endl;
-                cout << "Cantidad de tiquetes por tipo de usuario: " << endl;
+                cout << "Cantidad de tiquetes dispensados por tipo de usuario: " << endl;
                 if (tiposUsuario->isEmpty()) {
                     cout << "\tNo hay tipos de usuario definidos." << endl;
                 }
@@ -659,3 +691,5 @@ int main() {
 // We are so fucking cooked
 
 // We are so back
+
+// We did it
