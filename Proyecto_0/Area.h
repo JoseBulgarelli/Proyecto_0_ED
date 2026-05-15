@@ -47,10 +47,7 @@ public:
     Area() {} //Crea un objeto vacío.
 
     ~Area() { //Destrulle el objeto Area.
-        // servicios->clear();
-        // ventanillas->clear();
-        // delete servicios;
-        // delete ventanillas;
+        // RIP
     }
 
     void mostrarVentanillas() { //Muestra todas las ventanas de un Area.

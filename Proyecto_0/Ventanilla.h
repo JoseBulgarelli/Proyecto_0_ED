@@ -32,8 +32,16 @@ public:
         cantidadAtendidos++;
     }
 
+    string getUltimoAtendido() {
+        return ultimoAtendido;
+    }
+
     void setUltimoAtendido(string tiquete) {
         ultimoAtendido = tiquete;
+    }
+
+    void setCantidadAtendidos(int atendidos) {
+        cantidadAtendidos = atendidos;
     }
 
     string getNombre() {
